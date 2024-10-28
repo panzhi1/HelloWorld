@@ -158,6 +158,7 @@ function delete_node() {
     sudo systemctl disable nexus.service
     rm -rf /root/network-api
     rm -rf /etc/systemd/system/nexus.service
+    rm -f /root/.nexus/prover-id
     echo "成功删除节点。"
 }
 
@@ -175,6 +176,7 @@ for i in {1..10}; do
     echo "正在等待 1 分钟后删除节点..."
     sleep 30
     delete_node
+    sleep 30
 done
 
 echo "所有操作完成。Prover ID 已保存到 /root/.nexus/prover-ids.txt 文件中。"
