@@ -13,7 +13,24 @@ function start_and_save_id() {
     start_node
 
     # 获取 Prover ID
-    prover_id=$(cat /root/.nexus/prover-id)
+    local max_retries=100
+    local retry_count=0
+    prover_id=""
+
+    while [ -z "$prover_id" ] && [ $retry_count -lt $max_retries ]; do
+        prover_id=$(cat /root/.nexus/prover-id)
+        if [ -z "$prover_id" ]; then
+            echo "未能获取到 Prover ID,正在重试..."
+            retry_count=$((retry_count + 1))
+            sleep 5
+        fi
+    done
+
+    if [ -z "$prover_id" ]; then
+        echo "无法获取 Prover ID,脚本终止。"
+        exit 1
+    fi
+
 
    # 将 Prover ID 保存到文件
    PROVER_ID_FILE="/root/nexus/prover-ids.txt"
@@ -156,7 +173,7 @@ for i in {1..10}; do
     start_and_save_id
     # 延迟 1 分钟后删除节点
     echo "正在等待 1 分钟后删除节点..."
-    sleep 60
+    sleep 30
     delete_node
 done
 
