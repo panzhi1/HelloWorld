@@ -169,7 +169,7 @@ echo "开始自动启动和删除节点,并保存 Prover ID..."
 touch /root/.nexus/prover-ids.txt
 
 # 重复 10 次启动、保存 ID、删除、重启的过程
-for i in {1..10}; do
+for i in {1..20}; do
     echo "第 $i 次迭代..."
     start_and_save_id
     # 延迟 1 分钟后删除节点
