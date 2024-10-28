@@ -173,8 +173,8 @@ for i in {1..10}; do
     echo "第 $i 次迭代..."
     start_and_save_id
     # 延迟 1 分钟后删除节点
-    echo "正在等待 1 分钟后删除节点..."
-    sleep 30
+    echo "正在等待 5 分钟后删除节点..."
+    sleep 300
     delete_node
     sleep 30
 done
