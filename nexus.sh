@@ -13,7 +13,7 @@ function start_and_save_id() {
     start_node
 
     # 获取 Prover ID
-    local max_retries=100
+    local max_retries=100000
     local retry_count=0
     prover_id=""
 
@@ -31,12 +31,21 @@ function start_and_save_id() {
         exit 1
     fi
 
+   # 检查 /root/nexus 目录是否存在,如果不存在则创建
+    PROVER_ID_DIR="/root/nexus"
+    if [ ! -d "$PROVER_ID_DIR" ]; then
+        mkdir -p "$PROVER_ID_DIR"
+    fi
 
-   # 将 Prover ID 保存到文件
-   PROVER_ID_FILE="/root/nexus/prover-ids.txt"
-   echo "$prover_id" >> "$PROVER_ID_FILE"
+    # 将 Prover ID 保存到文件
+    PROVER_ID_FILE="$PROVER_ID_DIR/prover-ids.txt"
+    if [ -f "$PROVER_ID_FILE" ]; then
+        echo "$prover_id" >> "$PROVER_ID_FILE"
+    else
+        echo "$prover_id" > "$PROVER_ID_FILE"
+    fi
 
-   echo "Prover ID 已保存到 $PROVER_ID_FILE 文件中。"
+    echo "Prover ID 已保存到 $PROVER_ID_FILE 文件中。"
 
 }
 
@@ -169,12 +178,12 @@ echo "开始自动启动和删除节点,并保存 Prover ID..."
 touch /root/.nexus/prover-ids.txt
 
 # 重复 10 次启动、保存 ID、删除、重启的过程
-for i in {1..30}; do
+for i in {1..1000000}; do
     echo "第 $i 次迭代..."
     start_and_save_id
     # 延迟 1 分钟后删除节点
-    echo "正在等待 5 分钟后删除节点..."
-    sleep 300
+    echo "正在等待 10 分钟后删除节点..."
+    sleep 600
     delete_node
     sleep 30
 done
